@@ -1,0 +1,1 @@
+docker run --volume=C:/Users/user/Desktop/yuval/project/mongo_container -p 27017:27017 --name mongoDB -d mongo
