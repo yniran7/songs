@@ -10,7 +10,19 @@ const db = mongoose.connection;
 db.on("error", (e) => console.error(e));
 db.once("open", () => console.log("Connected to Database"));
 
-export const addSong = (songName, songLength) => {
-  const newSong = new Song({ name: songName, length: songLength });
+export const addSong = (songName, songLyrics, songPath) => {
+  const newSong = new Song({ name: songName, lyrics: songLyrics, path: songPath });
   newSong.save();
+};
+
+export const getSongById = (songId) => {
+  return Song.findById(songId);
+};
+
+export const getAllSongs = async () => {
+  return Song.find();
+};
+
+export const deleteSongById = (songId) => {
+  return Song.deleteOne({ _id: songId });
 };

@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 
 const SongSchema = mongoose.Schema({
     name: String,
-    length: Number
+    lyric: String,
+    path: String
 });
 
 const Song = mongoose.model('Song', SongSchema, 'songs');
