@@ -1,28 +1,53 @@
 import {
   addSong,
-  getSongById,
-  getAllSongs,
   deleteSongById,
-} from "../services/mongo_handler.js";
+  getAllSongs,
+  getSongById,
+} from "../models/song.js";
 
 export const getSongs = async (req, res) => {
-  const songs = await getAllSongs();
-  res.send(songs);
+  try {
+    const songs = await getAllSongs();
+    res.send(songs);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "Can not perform find operation.", error: error });
+  }
 };
-export const getSong = (req, res) => {
+
+export const getSong = async (req, res) => {
   const songId = req.params.songId;
-  getSongById(songId).then((song) => {
+  try {
+    const song = await getSongById(songId);
     res.send(song);
-  });
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "Can not perform find operation.", error: error });
+  }
 };
-export const postSong = (req, res) => {
+
+export const postSong = async (req, res) => {
   const data = req.body;
-  addSong(data.name, data.lyrics, data.path);
-  res.send('added song: ' + data.name);
+  try {
+    const status = await addSong(data.name, data.lyrics, data.path);
+    res.send(`added song: ${data.name}  ${status}`);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "Can not perform post operation.", error: error });
+  }
 };
-export const removeSong = (req, res) => {
+
+export const removeSong = async (req, res) => {
   const { songId } = req.params;
-  deleteSongById(songId).then((reualt) => {
-    res.send(reualt);
-  });
+  try {
+    const status = await deleteSongById(songId);
+    res.send(status);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: "Can not perform delete operation.", error: error });
+  }
 };
