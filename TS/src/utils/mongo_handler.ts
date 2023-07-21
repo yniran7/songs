@@ -1,14 +1,11 @@
 import mongoose from "mongoose";
 import { ensureError } from "./error_handler";
 import { LogLevel, logger } from "./logger";
+import { DATABASE_URL } from "../config";
 
 export const connectToDB = async () => {
   try {
-    await mongoose.connect(
-      process.env.DATABASE_URL
-        ? process.env.DATABASE_URL
-        : "mongodb://localhost:27017"
-    );
+    await mongoose.connect(DATABASE_URL);
     console.log("Connected To DB");
   } catch (e) {
     const error = ensureError(e);

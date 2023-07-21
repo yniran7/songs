@@ -28,3 +28,24 @@ export const unknownError = (error: Error, message: string, res: Response) => {
   logger(LogLevel.Error, `${message}. Unknown error. ${error}`);
   res.status(500).json({ message: "Unknown error", error: error });
 };
+
+const ERRORS: { [key: string]: Function } = {
+  MongoServerSelectionError: failedToConnectToDB,
+  CastError: (error: Error, message: string, res: Response) => {
+    logger(LogLevel.Error, `${message}, SongID not valid.  ${error}`);
+    res.status(400).json({ message: "Not valid song ID. ", error: error });
+  },
+  ValidationError: (error: Error, message: string, res: Response) => {
+    logger(LogLevel.Error, `Validation Error: ${error}`);
+    res.status(400).send(`Validation Error: ${error}`);
+  },
+};
+
+export const handleErrors = (error: Error, message: string, res: Response) => {
+  const errorHandelingFunc = ERRORS[error.name];
+  if (errorHandelingFunc !== undefined) {
+    errorHandelingFunc(error, message, res);
+  } else {
+    unknownError(error, message, res);
+  }
+};
